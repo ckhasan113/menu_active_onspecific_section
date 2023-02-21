@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      * {
+        font-family: Arial;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-size: 10pt;
+      }
+      .container {
+        padding: 50px;
+      }
+      .menu {
+        position: fixed;
+        width: 200px;
+        left: 750px;
+        top: 50px;
+      }
+      .menu_item {
+        color: #333;
+      }
+      .menu_active {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #000;
+      }
+      .section {
+        width: 600px;
+        padding: 25px;
+        color: #676767;
+        background-color: #fff;
+      }
+      .section_active {
+        color: #281c96;
+        background-color: #bdb6ff;
+      }
+      h1 {
+        padding-bottom: 20px;
+      }
+    </style>
+
+    <div class="menu">
+      <div class="menu_item">section_1</div>
+      <div class="menu_item">section_2</div>
+      <div class="menu_item">section_3</div>
+      <div class="menu_item">section_4</div>
+      <div class="menu_item">section_5</div>
+      <div class="menu_item">section_1</div>
+      <div class="menu_item">section_2</div>
+      <div class="menu_item">section_3</div>
+      <div class="menu_item">section_4</div>
+      <div class="menu_item">section_5</div>
+    </div>
+
+    <div class="container">
+      <div class="section">
+        <h1>section_1</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_2</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_3</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_4</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_5</h1>
+        <p class="text_fill"></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="section">
+        <h1>section_1</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_2</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_3</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_4</h1>
+        <p class="text_fill"></p>
+      </div>
+      <div class="section">
+        <h1>section_5</h1>
+        <p class="text_fill"></p>
+      </div>
+    </div>
+
+    <script>
+      // note: have tried editing .repeat to 3000 to make it a lot of text and 150 to make it a little text and still works right. also added a bunch of space with <br /> above and below the .container element and still works right.
+      asdf_text = "asdf ".repeat(750);
+      document.querySelectorAll(".text_fill").forEach(function (element) {
+        element.innerHTML = asdf_text;
+      });
+      containers = document.querySelectorAll(".container");
+      sections = document.querySelectorAll(".section");
+      menu = document.querySelectorAll(".menu_item");
+
+      percentage = 0;
+
+      function menu_highlight(section_name) {
+        active = 0;
+        innerHeight = window.innerHeight / 100;
+        heightIwant = innerHeight * percentage;
+        scrollHeight = window.scrollY + heightIwant;
+
+        // Check which part is in view
+        sections.forEach(function (section, section_index, domElementWithClassName) {
+          if (scrollHeight > section.offsetTop) {
+            active = section_index;
+          }
+        });
+        // Active menu
+        menu.forEach(function (menu_item, menu_index, domElementWithClassName) {
+          if (active === menu_index) {
+            menu_item.classList.add("menu_active");
+          } else {
+            menu_item.classList.remove("menu_active");
+          }
+        });
+        // Active section
+        sections.forEach(function (section, section_index, domElementWithClassName) {
+          if(section.classList.contains("section_active")){
+            console.log(section.classList);
+          }
+          if (active === section_index) {
+            section.classList.add("section_active");
+          } else {
+            section.classList.remove("section_active");
+          }
+        });
+      }
+
+      function element_scroll_percentage(element) {
+        rect = element.getBoundingClientRect();
+        if (Math.sign(rect.top) == -1) {
+          value = Math.abs(rect.top);
+          inc = (rect.height - window.innerHeight) / 100;
+          percentage = value / inc;
+          if (percentage > 100) {
+            percentage = 100;
+          }
+        } else {
+          percentage = 0;
+        }
+        return percentage;
+      }
+      
+      document.onscroll = function () {
+        containers.forEach(container => {
+          percentage = element_scroll_percentage(container);
+          // console.log(container);
+          menu_highlight();
+        });
+        
+      };
+
+      document.onscroll();
+
+    </script>
+  </body>
+</html>
